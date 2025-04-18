@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel Dinâmico - ORBITA-9</title>
+    <style>
+        body {
+            background-color: black;
+            color: lime;
+            font-family: monospace;
+            padding: 20px;
+        }
+        .fac, .acao {
+            border: 1px solid lime;
+            margin: 10px 0;
+            padding: 10px;
+        }
+        button {
+            background-color: #003300;
+            color: lime;
+            border: 1px solid lime;
+            margin: 2px 5px;
+            padding: 5px;
+        }
+        .alerta {
+            color: #00FF00;
+            font-style: italic;
+        }
+        #log {
+            background-color: #001100;
+            border: 1px solid lime;
+            padding: 10px;
+            margin-top: 20px;
+            height: 150px;
+            overflow-y: scroll;
+        }
+    </style>
+</head>
+<body>
+    <h1>ORBITA-9 - Painel de Influência com Ações</h1>
+    <p>Ajuste manualmente ou registre ações dos jogadores para influenciar as facções.</p>
+    <audio id="clickSound" preload="auto">
+        <source src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg" type="audio/ogg">
+        <source src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.mp3" type="audio/mpeg">
+    </audio>
+    <button onclick="resetar()">[ RESETAR TUDO ]</button>
+
+    <div class="fac">
+        <h2>Executores da Orion</h2>
+        <p>Influência: <span id="valor0">0</span> / 5
+            <button onclick="ajustar(0, 1, 'Executores da Orion')">[ + ]</button>
+            <button onclick="ajustar(0, -1, 'Executores da Orion')">[ - ]</button>
+        </p>
+        <div class="alerta" id="alerta0">Nada registrado ainda.</div>
+    </div>
+    <script>
+let recompensas = {
+3: "A facção obtém controle parcial de um setor.",
+4: "A facção começa a recrutar NPCs abertamente.",
+5: "A facção domina o setor e influencia finais possíveis.",
+};
+
+        var eventos0 = ['Aumentam patrulhas, torretas ativadas.', 'O setor 5 foi declarado hostil.', 'Estado marcial instaurado em toda ORBITA-9.'];
+    </script>
+    
+    <div class="fac">
+        <h2>Irmandade de Ferro</h2>
+        <p>Influência: <span id="valor1">0</span> / 5
+            <button onclick="ajustar(1, 1, 'Irmandade de Ferro')">[ + ]</button>
+            <button onclick="ajustar(1, -1, 'Irmandade de Ferro')">[ - ]</button>
+        </p>
+        <div class="alerta" id="alerta1">Nada registrado ainda.</div>
+    </div>
+    <script>
+        var eventos1 = ['Nova célula ativada em zona esquecida.', 'Drones começam a agir sem ordens centrais.', 'Tentativa de tomar o Nível 4 em curso.'];
+    </script>
+    
+    <div class="fac">
+        <h2>Filhos do Vácuo</h2>
+        <p>Influência: <span id="valor2">0</span> / 5
+            <button onclick="ajustar(2, 1, 'Filhos do Vácuo')">[ + ]</button>
+            <button onclick="ajustar(2, -1, 'Filhos do Vácuo')">[ - ]</button>
+        </p>
+        <div class="alerta" id="alerta2">Nada registrado ainda.</div>
+    </div>
+    <script>
+        var eventos2 = ['Sussurros são ouvidos nas paredes.', 'Sacrifícios começam nos níveis baixos.', 'A Entidade está acordando.'];
+    </script>
+    
+    <div class="fac">
+        <h2>Esquecidos</h2>
+        <p>Influência: <span id="valor3">0</span> / 5
+            <button onclick="ajustar(3, 1, 'Esquecidos')">[ + ]</button>
+            <button onclick="ajustar(3, -1, 'Esquecidos')">[ - ]</button>
+        </p>
+        <div class="alerta" id="alerta3">Nada registrado ainda.</div>
+    </div>
+    <script>
+        var eventos3 = ['Prisões abandonadas se tornam fortalezas.', 'Eles começam a tomar setores lentamente.', 'Fazem contato com elementos rebeldes em todo o setor.'];
+    </script>
+    
+    <div class="fac">
+        <h2>Coletivo Hexa</h2>
+        <p>Influência: <span id="valor4">0</span> / 5
+            <button onclick="ajustar(4, 1, 'Coletivo Hexa')">[ + ]</button>
+            <button onclick="ajustar(4, -1, 'Coletivo Hexa')">[ - ]</button>
+        </p>
+        <div class="alerta" id="alerta4">Nada registrado ainda.</div>
+    </div>
+    <script>
+        var eventos4 = ['Terminais começam a se reconectar.', 'IA auxiliar desperta com fragmentos da central.', 'Uma rede alternativa toma o sistema.'];
+    </script>
+    
+    <div class="fac">
+        <h2>Ratos de Fluxo</h2>
+        <p>Influência: <span id="valor5">0</span> / 5
+            <button onclick="ajustar(5, 1, 'Ratos de Fluxo')">[ + ]</button>
+            <button onclick="ajustar(5, -1, 'Ratos de Fluxo')">[ - ]</button>
+        </p>
+        <div class="alerta" id="alerta5">Nada registrado ainda.</div>
+    </div>
+    <script>
+        var eventos5 = ['Rotas de contrabando se multiplicam.', 'Territórios sem vigilância agora são deles.', 'Eles tomam os sistemas de ventilação e escurecem setores.'];
+    </script>
+    <div class="acao"><h2>AÇÕES DOS JOGADORES</h2><button onclick="registrarAcao(0)">Sabotaram torre de vigilância</button><br><button onclick="registrarAcao(1)">Mataram líder da Irmandade</button><br><button onclick="registrarAcao(2)">Ajudaram IA a restaurar energia</button><br><button onclick="registrarAcao(3)">Roubaram recursos de rebeldes</button><br><button onclick="registrarAcao(4)">Salvam mutante no Nível 2</button><br><button onclick="registrarAcao(5)">Incitaram motim no refeitório</button><br><button onclick="registrarAcao(6)">Executaram um prisioneiro publicamente</button><br><button onclick="registrarAcao(7)">Divulgaram mensagem contra AIDEN-3</button><br><button onclick="registrarAcao(8)">Apoiaram sacrifício ritual</button><br><button onclick="registrarAcao(9)">Destruíram laboratório do Nível 6</button><br><button onclick="registrarAcao(10)">Torturaram um informante</button><br><button onclick="registrarAcao(11)">Liberaram acesso aos andares inferiores</button><br></div>
+<div id="log"><b>LOG DE AÇÕES:</b><br></div>
+<script>
+    let faccoes = ["Executores da Orion", "Irmandade de Ferro", "Filhos do Vácuo", "Esquecidos", "Coletivo Hexa", "Ratos de Fluxo"];
+
+    function ajustar(id, mod, nome) {
+        document.getElementById("clickSound").play();
+        let valEl = document.getElementById("valor" + id);
+        let alertaEl = document.getElementById("alerta" + id);
+        let atual = parseInt(valEl.innerText);
+        let novo = Math.max(0, Math.min(5, atual + mod));
+        valEl.innerText = novo;
+        let mensagem = novo === 0 ? "A facção perdeu influência completamente." : eventos[id][novo - 1];
+if (recompensas[novo]) mensagem += " [" + recompensas[novo] + "]";
+        alertaEl.innerText = mensagem;
+        registrarLog(nome + " => Nível " + novo + ": " + mensagem);
+    }
+
+    function resetar() {
+        for (let i = 0; i < 6; i++) {
+            document.getElementById("valor" + i).innerText = 0;
+            document.getElementById("alerta" + i).innerText = "Nada registrado ainda.";
+        }
+        document.getElementById("log").innerHTML = "<b>LOG DE AÇÕES:</b><br>Tudo foi resetado.<br>";
+        document.getElementById("clickSound").play();
+    }
+
+    function registrarLog(msg) {
+        let log = document.getElementById("log");
+        log.innerHTML += msg + "<br>";
+        log.scrollTop = log.scrollHeight;
+    }
+
+    let efeitos = [
+{"5": 1, "0": -1, },
+{"1": -1, "3": 1, },
+{"4": 1, "2": -1, },
+{"3": -1, "0": 1, },
+{"3": 1, "2": 1, },
+{"5": 1, "0": -1, },
+{"2": 1, "0": 1, },
+{"3": 1, "4": -1, },
+{"2": 1, "4": -1, },
+{"1": -1, "5": 1, },
+{"3": -1, "0": 1, },
+{"2": 1, "0": -1, },
+];
+
+    function registrarAcao(i) {
+        for (const [facId, delta] of Object.entries(efeitos[i])) {
+            ajustar(parseInt(facId), delta, faccoes[facId]);
+        }
+    }
+</script>
+</body>
+</html>
